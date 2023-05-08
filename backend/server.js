@@ -1,20 +1,21 @@
-const express = require("express");
-const bodyParser = require("body-parser")
+const express = require ("express");
+
 const {
-  initializeDatabase,
   readTeachers,
-  readTeacherInfo,
-  addTeacher,
-  updateTeacher,
-  deleteTeacher,
-  addStudent,
   readStudents,
+  addStudent,
+  addTeacher,
+  deleteTeacher,
+  deleteStudent,
   readStudentInfo,
+  readTeacherInfo,
   updateStudent,
-  deleteStudent
-} = require("./database.js");
+  updateTeacher,
+  dbinitialize
+} = require ("./database.js");
 
 const app = express();
+const bodyParser = require  ("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -57,7 +58,10 @@ app.post("/addTeacher", async function (req, res) {
 
 app.post("/editTeacher", async function (req, res) {
   let reqBody = req.body;
-  let data = await updateTeacher(reqBody.name, reqBody.age, reqBody.id);
+  console.log(
+    "Request received to update teacher. Req body: " + JSON.stringify(reqBody)
+  );
+  let data = await updateTeacher(reqBody.name,reqBody.age,reqBody.id);
 
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(data));
@@ -73,6 +77,8 @@ app.post("/deleteTeacher", async function (req, res) {
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(data));
 });
+
+// ============== Student Related endpoints ==============
 
 app.get("/listStudents", async function (req, res) {
   console.log("Request received to list students");
@@ -123,7 +129,7 @@ app.post("/editStudent", async function (req, res) {
   console.log(
     "Request received to update Student. Req body: " + JSON.stringify(reqBody)
   );
-  let data = await updateStudent(reqBody.name, reqBody.age, reqBody.hometown, reqBody.id);
+  let data = await updateStudent(reqBody.name,reqBody.age,reqBody.hometown,reqBody.id);
 
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(data));
